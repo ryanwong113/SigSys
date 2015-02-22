@@ -14,10 +14,13 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 	<context:component-scan base-package="com.SigSys" />
  	<context:annotation-config />
  
-<!--  	<mvc:resources mapping="/jsp/**" location="/WEB-INF/jsp/" />
-    <mvc:annotation-driven/> -->
+    <mvc:annotation-driven/>
  
-   	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+	        <property name="order" value="1" />
+	</bean>
+ 
+   	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">   	
     	<property name="prefix" value="/WEB-INF/jsp/" />
     	<property name="suffix" value=".jsp" />
     </bean>

@@ -36,13 +36,13 @@ public class VisitorController {
 		return "viewVisitors";
 	}
 	
-	@RequestMapping(value = "/addVisitor", method = RequestMethod.GET)
+	@RequestMapping(value = "addVisitor", method = RequestMethod.GET)
 	public String addVisitor(ModelMap modelMap) {
 		modelMap.addAttribute("newVisitor", new Visitor());
 		return "newVisitor";
 	}
 	
-	@RequestMapping(value = "/addVisitor", method = RequestMethod.POST)
+	@RequestMapping(value = "addVisitor", method = RequestMethod.POST)
 	public String addVisitor(ModelMap modelMap, @ModelAttribute("newVisitor") Visitor newVisitor) {
 		visitorsCache.addVisitor(newVisitor);
 		return redirect("homepage");

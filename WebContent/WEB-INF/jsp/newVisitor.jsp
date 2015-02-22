@@ -6,7 +6,7 @@
 	<title>New Visitor</title>
 </head>
 <body>
-	<form:form action="/addVisitor" modelAttribute="newVisitor" method="POST">
+	<form:form action="/SigSys/addVisitor" modelAttribute="newVisitor" method="POST">
 	   	<label for="firstNameInput">First Name: </label>
       	<form:input id="firstNameInput" path="firstName" />
 		<br>

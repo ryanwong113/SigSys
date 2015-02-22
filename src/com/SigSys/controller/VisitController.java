@@ -3,6 +3,8 @@ package com.SigSys.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.SigSys.cache.VisitorsCache;
 import com.SigSys.cache.VisitsCache;
@@ -42,11 +45,6 @@ public class VisitController {
 		List<Visit> visits = new ArrayList<Visit>();
 		visits.addAll(visitsCache.getVisits().values());
 		return visits;
-	}
-	
-	@ModelAttribute("testVisitForm")
-	public TestVisitForm getTestVisitForm() {
-		return new TestVisitForm();
 	}
 	
 	@RequestMapping(value = "/homepage", method = RequestMethod.GET)
@@ -83,6 +81,34 @@ public class VisitController {
 		return "homepage";
 	}
 	
+	@RequestMapping(value = "/addTestVisit", method = RequestMethod.GET)
+	@ResponseBody
+	public String addTestVisit(ModelMap modelMap) {
+		modelMap.addAttribute("testVisitForm", new TestVisitForm());
+		return "newTestVisit";
+	}
+	
+	@RequestMapping(value = "/addTestVisit", method = RequestMethod.POST)
+	@ResponseBody
+	public String addTestVisit(ModelMap modelMap, @ModelAttribute("testVisitForm") TestVisitForm testVisitForm) {
+		final int numberOfTestVisits = Integer.parseInt(testVisitForm.getNumberOfTestVisits());
+		Visit visit;
+		for (int i = 1; i <= numberOfTestVisits; i++) {
+			visit = new Visit();
+			visit.setId(i);
+			visit.setTimeIn(new DateTime());
+		}
+		return "homepage";
+	}
+	
+	@RequestMapping(value = "/endVisit/{visitId}", method = RequestMethod.GET)
+	public String endVisit(ModelMap modelMap, @PathParam("visitId") int visitId) {
+		Visit visit = visitsCache.getVisit(visitId);
+		visit.setTimeOut(new DateTime());
+		visitsCache.updateVisit(visit);
+		return "homepage";
+	}
+	
 	@RequestMapping(value = "/updateVisit", method = RequestMethod.GET)
 	public String updateVisit(ModelMap modelMap, Visit visit) {
 		visitsCache.updateVisit(visit);
@@ -95,36 +121,6 @@ public class VisitController {
 		visitsCache.deleteVisit(visit);
 		modelMap.addAttribute("visit", visit);
 		return redirect("homepage");
-	}
-	
-	@RequestMapping(value = "/addTestVisits", method = RequestMethod.GET)
-	public String addTestVisits(ModelMap modelMap) {
-		Visit visit;
-		Visitor visitor;
-		int numberOfTestVisits = 10;
-		for (Integer i = 1; i <= numberOfTestVisits; i++) {			
-			visit = new Visit();
-			visitor = new Visitor();
-			
-			visitor.setId(i);
-			visitor.setFirstName("first_name_" + i);
-			visitor.setLastName("last_name_" + i);
-			visitor.setFrom("from_" + i);
-			
-			visit.setId(i);
-			visit.setVisitor(visitor);
-			if (i == 3 || i == 6) {
-				visit.setCompany(Company.COMPANY_A);
-			} else if (i % 2 == 0) {
-				visit.setCompany(Company.COMPANY_B);
-			} else {
-				visit.setCompany(Company.COMPANY_C);
-			}
-			visit.setVisitReason("visit_reason_" + i);
-			visit.setTimeIn(new DateTime(2015, 1, 1, 12, i));
-			visit.setTimeOut(new DateTime(2015, 1, 1, 12, i+10));
-		}
-		return "viewVisitors";
 	}
 	
 	private String redirect(String page) {

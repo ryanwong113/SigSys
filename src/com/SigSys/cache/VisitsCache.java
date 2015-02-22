@@ -37,12 +37,12 @@ public class VisitsCache {
 		return visits.isEmpty();
 	}
 	
-	public void addVisit(Visit visit) {
+	public void addVisit(final Visit visit) {
 		visit.setId(currentId);
 		visits.put(currentId, visit);
 		currentId++;
 	}
-	
+		
 	public void updateVisit(Visit visit) {
 		if (!visits.containsValue(visit)) {
 			
@@ -57,7 +57,15 @@ public class VisitsCache {
 		visits.remove(visit.getId());
 	}
 	
-	public List<Visit> getVisitsByCompany(Company company) {
+	public Visit getVisit(final int id) {
+		Visit visit = null;
+		if (visits.containsKey(id)) {
+			visit = visits.get(id);
+		}
+		return visit;
+	}
+	
+	public List<Visit> getVisitsByCompany(final Company company) {
 		List<Visit> visits = (List<Visit>) this.visits.values();
 		Iterator<Visit> it = visits.iterator();
 		while (it.hasNext()) {

@@ -13,6 +13,11 @@ public class NewVisitForm {
 		visitor = new Visitor();
 	}
 	
+	public NewVisitForm(Visit visit, Visitor visitor) {
+		this.visit = visit;
+		this.visitor = visitor;
+	}
+	
 	public Visit getVisit() {
 		return visit;
 	}
