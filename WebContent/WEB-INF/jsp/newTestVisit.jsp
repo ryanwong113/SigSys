@@ -7,7 +7,7 @@
 </head>
 <body>
 	<form:form action="/SigSys/addTestVisit" modelAttribute="testVisitForm" method="POST">
-		<label for="numberOfTestVisitsInput">Number of Test Visits: </label>>
+		<label for="numberOfTestVisitsInput">Number of Test Visits: </label>
 		<form:input id="numberOfTestVisitsInput" path="numberOfTestVisits" />
 		<br>
 	   	<input type="submit" value="submit" />  

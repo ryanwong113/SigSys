@@ -12,7 +12,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.SigSys.cache.VisitorsCache;
 import com.SigSys.cache.VisitsCache;
@@ -82,23 +81,31 @@ public class VisitController {
 	}
 	
 	@RequestMapping(value = "/addTestVisit", method = RequestMethod.GET)
-	@ResponseBody
 	public String addTestVisit(ModelMap modelMap) {
 		modelMap.addAttribute("testVisitForm", new TestVisitForm());
 		return "newTestVisit";
 	}
 	
 	@RequestMapping(value = "/addTestVisit", method = RequestMethod.POST)
-	@ResponseBody
 	public String addTestVisit(ModelMap modelMap, @ModelAttribute("testVisitForm") TestVisitForm testVisitForm) {
 		final int numberOfTestVisits = Integer.parseInt(testVisitForm.getNumberOfTestVisits());
 		Visit visit;
+		Visitor visitor;
 		for (int i = 1; i <= numberOfTestVisits; i++) {
 			visit = new Visit();
+			visitor = new Visitor();
+			visitor.setId(i);
+			
+			visitor.setFirstName("firstName_" + i);
+			visitor.setLastName("lastName_" + i);
+			visitorsCache.addVisitor(visitor);
+			
 			visit.setId(i);
+			visit.setVisitor(visitor);
 			visit.setTimeIn(new DateTime());
+			visitsCache.addVisit(visit);
 		}
-		return "homepage";
+		return redirect("homepage");
 	}
 	
 	@RequestMapping(value = "/endVisit/{visitId}", method = RequestMethod.GET)
