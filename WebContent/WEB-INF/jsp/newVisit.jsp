@@ -1,12 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<html>
 <head>
 <title>New Visit</title>
 </head>
 <body>
-	<form:form action="/SigSys/addVisit" modelAttribute="newVisitForm" method="POST">
+	<a href="/SigSys/homepage">Homepage</a>
+	<br>
+	<form:form action="/SigSys/visit/add" modelAttribute="newVisitForm" method="POST">
 		<label for="firstNameInput">First Name: </label>
       	<form:input id="firstNameInput" path="visitor.firstName" />
 		<br>
@@ -30,4 +31,3 @@
 	   	<input type="submit" value="submit" />  
 	</form:form>
 </body>
-</html>

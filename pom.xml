@@ -35,6 +35,14 @@
   </repositories>
   
   <dependencies>
+  
+  	<!-- DisplayTag -->
+  	<dependency>
+		<groupId>displaytag</groupId>
+		<artifactId>displaytag</artifactId>
+		<version>1.2</version>
+	</dependency>
+  	
     <!-- HSQL database -->
 	<dependency>
 		<groupId>org.hsqldb</groupId>

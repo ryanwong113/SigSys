@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.SigSys.cache.VisitorsCache;
 import com.SigSys.model.Visitor;
 
+@RequestMapping("/visitor")
 @Controller
 public class VisitorController {
 
@@ -26,7 +28,7 @@ public class VisitorController {
 		return visitors;
 	}
 	
-	@RequestMapping(value = "viewVisitors", method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String viewVisitors(ModelMap modelMap) {
 		if (!visitorsCache.isEmpty()) {
 			modelMap.addAttribute("isEmpty", "false");
@@ -36,26 +38,38 @@ public class VisitorController {
 		return "viewVisitors";
 	}
 	
-	@RequestMapping(value = "addVisitor", method = RequestMethod.GET)
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String addVisitor(ModelMap modelMap) {
 		modelMap.addAttribute("newVisitor", new Visitor());
 		return "newVisitor";
 	}
 	
-	@RequestMapping(value = "addVisitor", method = RequestMethod.POST)
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String addVisitor(ModelMap modelMap, @ModelAttribute("newVisitor") Visitor newVisitor) {
 		visitorsCache.addVisitor(newVisitor);
 		return redirect("homepage");
 	}
 	
-	@RequestMapping(value = "/updateVisitor", method = RequestMethod.PUT)
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public String updateVisitor(ModelMap modelMap, Visitor visitor) {
 		visitorsCache.updateVisitor(visitor);
 		modelMap.addAttribute("visitor", visitor);
 		return redirect("homepage");
 	}
 	
-	@RequestMapping(value = "/deleteVisitor", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
+	public String view(ModelMap modelMap) {
+		return "viewVisitors";
+	}
+	
+	@RequestMapping(value = "/view/{visitorId}", method = RequestMethod.GET)
+	public String view(ModelMap modelMap, @PathVariable Integer visitorId) {
+		Visitor visitor = visitorsCache.getVisitorById(visitorId);
+		modelMap.addAttribute("visitor", visitor);
+		return "viewVisitor";
+	}
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	public String deleteVisitor(ModelMap modelMap, Visitor visitor) {
 		visitorsCache.deleteVisitor(visitor);
 		modelMap.addAttribute("visitor", visitor);

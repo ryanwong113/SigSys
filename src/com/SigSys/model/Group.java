@@ -38,10 +38,4 @@ public class Group {
 	public void addVisitor(Visitor visitor) {
 		visitors.add(visitor);
 	}
-	
-	@Override
-    public String toString() {
-        return "Group [id=" + id + ", name=" + name + ", visitors=" + visitors.toString() + "]";
-    }
-
 }

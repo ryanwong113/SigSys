@@ -3,24 +3,23 @@ package com.SigSys.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.websocket.server.PathParam;
-
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.SigSys.cache.VisitorsCache;
 import com.SigSys.cache.VisitsCache;
 import com.SigSys.form.NewVisitForm;
-import com.SigSys.form.TestVisitForm;
 import com.SigSys.model.Company;
 import com.SigSys.model.Visit;
 import com.SigSys.model.Visitor;
 
+@RequestMapping("/visit")
 @Controller
 public class VisitController {
 	
@@ -46,24 +45,14 @@ public class VisitController {
 		return visits;
 	}
 	
-	@RequestMapping(value = "/homepage", method = RequestMethod.GET)
-	public String showVisits(ModelMap modelMap) {
-		if (!visitsCache.isEmpty()) {
-			modelMap.addAttribute("isEmpty", "false");
-		} else {
-			modelMap.addAttribute("isEmpty", "true");
-		}
-		return "homepage";
-	}
-	
-	@RequestMapping(value = "/addVisit", method = RequestMethod.GET)
-	public String addVisit(ModelMap modelMap) {
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	public String add(ModelMap modelMap) {
 		modelMap.addAttribute("newVisitForm", new NewVisitForm());
 		return "newVisit";
 	}
 	
-	@RequestMapping(value = "/addVisit", method = RequestMethod.POST)
-	public String addVisit(ModelMap modelMap, @ModelAttribute("newVisitForm") NewVisitForm newVisitForm) {
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public String add(ModelMap modelMap, @ModelAttribute("newVisitForm") NewVisitForm newVisitForm) {
 		Visit newVisit = newVisitForm.getVisit();
 		Visitor newVisitor = newVisitForm.getVisitor();
 		
@@ -77,18 +66,12 @@ public class VisitController {
 			visitorsCache.addVisitor(newVisitor);
 		}
 		
-		return "homepage";
+		return redirect("homepage");
 	}
 	
-	@RequestMapping(value = "/addTestVisit", method = RequestMethod.GET)
-	public String addTestVisit(ModelMap modelMap) {
-		modelMap.addAttribute("testVisitForm", new TestVisitForm());
-		return "newTestVisit";
-	}
-	
-	@RequestMapping(value = "/addTestVisit", method = RequestMethod.POST)
-	public String addTestVisit(ModelMap modelMap, @ModelAttribute("testVisitForm") TestVisitForm testVisitForm) {
-		final int numberOfTestVisits = Integer.parseInt(testVisitForm.getNumberOfTestVisits());
+	@RequestMapping(value = "/addTest", method = RequestMethod.GET)
+	public String addTest(ModelMap modelMap) {
+		final int numberOfTestVisits = 10;
 		Visit visit;
 		Visitor visitor;
 		for (int i = 1; i <= numberOfTestVisits; i++) {
@@ -108,23 +91,43 @@ public class VisitController {
 		return redirect("homepage");
 	}
 	
-	@RequestMapping(value = "/endVisit/{visitId}", method = RequestMethod.GET)
-	public String endVisit(ModelMap modelMap, @PathParam("visitId") int visitId) {
+	@RequestMapping(value = "/end/{visitId}", method = RequestMethod.GET)
+	public String end(ModelMap modelMap, @PathVariable Integer visitId) {
 		Visit visit = visitsCache.getVisit(visitId);
-		visit.setTimeOut(new DateTime());
-		visitsCache.updateVisit(visit);
-		return "homepage";
+		if (visit != null) {
+			visit.setTimeOut(new DateTime());
+			visitsCache.updateVisit(visit);
+		}
+		return redirect("homepage");
 	}
 	
-	@RequestMapping(value = "/updateVisit", method = RequestMethod.GET)
-	public String updateVisit(ModelMap modelMap, Visit visit) {
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public String search(ModelMap modelMap) {
+		
+		return redirect("");
+	}
+	
+	@RequestMapping(value = "/filter", method = RequestMethod.GET)
+	public String filter(ModelMap modelMap) {
+		return redirect("homepage");
+	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.GET)
+	public String update(ModelMap modelMap, Visit visit) {
 		visitsCache.updateVisit(visit);
 		modelMap.addAttribute("visit", visit);
 		return redirect("homepage");
 	}
 	
-	@RequestMapping(value = "/deleteVisit", method = RequestMethod.DELETE)
-	public String deleteVisit(ModelMap modelMap, Visit visit) {
+	@RequestMapping(value = "/view/{visitId}", method = RequestMethod.GET)
+	public String view(ModelMap modelMap, @PathVariable Integer visitId) {
+		Visit visit = visitsCache.getVisit(visitId);
+		modelMap.addAttribute("visit", visit);
+		return "viewVisit";
+	}
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+	public String delete(ModelMap modelMap, Visit visit) {
 		visitsCache.deleteVisit(visit);
 		modelMap.addAttribute("visit", visit);
 		return redirect("homepage");

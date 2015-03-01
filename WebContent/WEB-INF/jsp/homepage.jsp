@@ -1,20 +1,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
 
-<html>
-<head>
 <title>Homepage</title>
 </head>
 <body>
-	<a href="${pageContext.request.contextPath}/addVisit">Add visit</a>
+	<a href="/SigSys/visit/add">Add visit</a>
 	<br>
-	<a href="${pageContext.request.contextPath}/addVisitor">Add visitor</a>
+	<a href="/SigSys/visitor/add">Add visitor</a>
 	<br>
-	<a href="${pageContext.request.contextPath}/viewVisitors">View visitors</a>
+	<a href="/SigSys/visitor/view">View visitors</a>
 	<br>
-	<a href="${pageContext.request.contextPath}/admin">Admin Page</a>
+	<a href="/SigSys/admin">Admin Page</a>
 	<br>
-	<a href="${pageContext.request.contextPath}/addTestVisit">Add test visits...</a>
+	<a href="/SigSys/visit/addTest">Add test visits...</a>
 	<br>
 	
 	<c:choose>
@@ -22,37 +21,15 @@
 			Oh, no data can be shown...
 		</c:when>
 		<c:otherwise>
-			<table>
-				<tr>
-			        <td>Visit ID</td>
-			        <td>Visitor</td>
-			        <td>From</td>
-			        <td>Visiting</td>
-			        <td>Visit Reason</td>
-			        <td>Time In</td>
-			        <td>Time Out</td>
-			        <td></td>
-			    </tr>
-			    
-			    <!-- Show all visits from cache -->
-		    	<c:forEach var="visit" items="${visits}">
-		    		<tr>
-		    			<td><c:out value="${visit.id}" /></td>
-		    			<td><c:out value="${visit.visitor.firstName} ${visit.visitor.lastName}" /></td>
-		    			<td><c:out value="${visit.visitor.from}" /></td>
-		    			<td><c:out value="${visit.company.name}" /></td>
-		    			<td><c:out value="${visit.visitReason}" /></td>
-		    			<td><c:out value="${visit.timeIn}" /></td>
-		    			<td></td>
-		    			<c:url value="/endVisit" var="endVisitUrl">
-		    				<c:param name="visitId" value="${visit.id}"/>
-		    			</c:url>
-		    			<td><a href="${endVisitUrl}">End visit</a></td>
-		    		</tr>
-		    	</c:forEach>
-			</table>
+			<display:table id="visit" name="visits" requestURI="/SigSys/">
+				<display:column title="Visit ID" >${visit.id}</display:column>
+				<display:column title="Visitor">${visit.visitor.firstName} ${visit.visitor.lastName}</display:column>
+				<display:column title="From">${visit.visitor.from}</display:column>
+				<display:column title="Visiting">${visit.company.name}</display:column>
+				<display:column title="Visit Reason">${visit.visitReason}</display:column>
+				<display:column title="Time In" sortable="true">${visit.timeIn}</display:column>
+				<display:column title="Time Out" sortable="true">${visit.timeOut != null ? visit.timeOut : ''}</display:column>
+				<display:column title="End Visit"><a href="/SigSys/visit/end/${visit.id}">End visit</a></display:column>
+			</display:table>
 		</c:otherwise>
 	</c:choose>
-	
-</body>
-</html>

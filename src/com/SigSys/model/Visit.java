@@ -61,11 +61,4 @@ public class Visit {
 	public void setTimeOut(DateTime timeOut) {
 		this.timeOut = timeOut;
 	}
-	
-	@Override
-    public String toString() {
-        return "Visit [id=" + id + ", visitor=" + visitor.getFirstName() + visitor.getLastName() + 
-        		", company=" + company.name() + "]";
-    }
-	
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.SigSys.cache.VisitorsCache;
 import com.SigSys.cache.VisitsCache;
 
+@RequestMapping("/admin")
 @Controller
 public class AdminController {
 
@@ -18,9 +19,25 @@ public class AdminController {
 	@Autowired
 	VisitorsCache visitorsCache;
 	
-	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String admin(ModelMap modelMap) {
 		return "admin";
+	}
+	
+	@RequestMapping(value = "/reloadVisit", method = RequestMethod.GET)
+	public String reloadVisit(ModelMap modelMap) {
+		visitsCache.refresh();
+		return "homepage";
+	}
+	
+	@RequestMapping(value = "/reloadVisitor", method = RequestMethod.GET)
+	public String reloadVisitor(ModelMap modelMap) {
+		visitorsCache.refresh();
+		return "homepage";
+	}
+	
+	private String redirect(String page) {
+		return "redirect:" + page;
 	}
 	
 }

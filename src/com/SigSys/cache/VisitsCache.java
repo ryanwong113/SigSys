@@ -15,7 +15,7 @@ import com.SigSys.model.Visit;
 @Service
 public class VisitsCache {
 
-	private int currentId = 1;
+	private Integer currentId = 1;
 	
 	// Cache for storing visits
 	private Map<Integer, Visit> visits;
@@ -57,7 +57,7 @@ public class VisitsCache {
 		visits.remove(visit.getId());
 	}
 	
-	public Visit getVisit(final int id) {
+	public Visit getVisit(final Integer id) {
 		Visit visit = null;
 		if (visits.containsKey(id)) {
 			visit = visits.get(id);
