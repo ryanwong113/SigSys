@@ -25,7 +25,7 @@
 		 	</c:forEach>
 		</form:select>
 		<br>
-		<label for="visitReasonInput">Visit Reason: </label>>
+		<label for="visitReasonInput">Visit Reason: </label>
 		<form:input id="visitReasonInput" path="visit.visitReason" />
 		<br>
 	   	<input type="submit" value="submit" />  

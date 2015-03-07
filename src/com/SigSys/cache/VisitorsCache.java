@@ -16,8 +16,8 @@ public class VisitorsCache {
 	
 	private int currentId = 1;
 	
-	// Cache for storing visitors
-	private Map<Integer, Visitor> visitors;
+	// Storing visitors by id
+	private Map<Integer, Visitor> visitorsById;
 	
 	@PostConstruct
 	public void init() {
@@ -25,47 +25,59 @@ public class VisitorsCache {
 	}
 	
 	public void refresh() {
-		visitors = new HashMap<Integer, Visitor>();
+		visitorsById = new HashMap<Integer, Visitor>();
 	}
 	
 	public Map<Integer, Visitor> getVisitors() {
-		return visitors;
+		return visitorsById;
 	}
 	
 	public boolean isEmpty() {
-		return visitors.isEmpty();
+		return visitorsById.isEmpty();
 	}
 	
 	public void addVisitor(Visitor visitor) {
 		visitor.setId(currentId);
-		visitors.put(currentId, visitor);
+		visitorsById.put(currentId, visitor);
 		currentId++;
 	}
 	
 	public void updateVisitor(Visitor visitor) {
-		if (!visitors.containsValue(visitor)) {
+		if (!visitorsById.containsValue(visitor)) {
 			
 		}
-		visitors.put(visitor.getId(), visitor);
+		visitorsById.put(visitor.getId(), visitor);
 	}
 	
 	public void deleteVisitor(Visitor visitor) {
-		if (!visitors.containsValue(visitor)) {
+		if (!visitorsById.containsValue(visitor)) {
 			
 		}
-		visitors.remove(visitor.getId());
+		visitorsById.remove(visitor.getId());
 	}
 	
 	public Visitor getVisitorById(int id) {
-		return visitors.get(id);
+		return visitorsById.get(id);
 	}
 	
 	public boolean contains(Visitor visitor) {
-		return visitors.containsValue(visitor);
+		return visitorsById.containsValue(visitor);
+	}
+	
+	public List<Visitor> getVisitorsByFirstName(String firstName) {
+		List<Visitor> visitors = (List<Visitor>) visitorsById.values();
+		Iterator<Visitor> it = visitors.iterator();
+		while (it.hasNext()) {
+			Visitor visitor = it.next();
+			if (!firstName.equals(visitor.getFirstName())) {
+				it.remove();
+			}
+		}
+		return visitors;
 	}
 	
 	public List<Visitor> getVisitorsByLastName(String lastName) {
-		List<Visitor> visitors = (List<Visitor>) this.visitors.values();
+		List<Visitor> visitors = (List<Visitor>) visitorsById.values();
 		Iterator<Visitor> it = visitors.iterator();
 		while (it.hasNext()) {
 			Visitor visitor = it.next();
@@ -77,7 +89,7 @@ public class VisitorsCache {
 	}
 	
 	public List<Visitor> getVisitorsByFrom(String from) {
-		List<Visitor> visitors = (List<Visitor>) this.visitors.values();
+		List<Visitor> visitors = (List<Visitor>) visitorsById.values();
 		Iterator<Visitor> it = visitors.iterator();
 		while (it.hasNext()) {
 			Visitor visitor = it.next();

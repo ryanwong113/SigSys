@@ -15,7 +15,9 @@
 	<br>
 	<a href="/SigSys/visit/addTest">Add test visits...</a>
 	<br>
-	
+	<a href="/SigSys/filter">Filter visits / visitors</a>
+	<br>
+	<br>
 	<c:choose>
 		<c:when test="${isEmpty eq 'true'}">
 			Oh, no data can be shown...

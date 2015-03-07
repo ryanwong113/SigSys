@@ -7,10 +7,12 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 import com.SigSys.model.Company;
 import com.SigSys.model.Visit;
+import com.SigSys.model.Visitor;
 
 @Service
 public class VisitsCache {
@@ -18,7 +20,7 @@ public class VisitsCache {
 	private Integer currentId = 1;
 	
 	// Cache for storing visits
-	private Map<Integer, Visit> visits;
+	private Map<Integer, Visit> visitsById;
 		
 	@PostConstruct
 	public void init() {
@@ -26,47 +28,73 @@ public class VisitsCache {
 	}
 	
 	public void refresh() {
-		visits = new HashMap<Integer, Visit>();
+		visitsById = new HashMap<Integer, Visit>();
 	}
 	
 	public Map<Integer, Visit> getVisits() {
-		return visits;
+		return visitsById;
 	}
 	
 	public boolean isEmpty() {
-		return visits.isEmpty();
+		return visitsById.isEmpty();
 	}
 	
 	public void addVisit(final Visit visit) {
 		visit.setId(currentId);
-		visits.put(currentId, visit);
+		visitsById.put(currentId, visit);
 		currentId++;
 	}
 		
 	public void updateVisit(Visit visit) {
-		if (!visits.containsValue(visit)) {
+		if (!visitsById.containsValue(visit)) {
 			
 		}
-		visits.put(visit.getId(), visit);
+		visitsById.put(visit.getId(), visit);
 	}
 	
 	public void deleteVisit(Visit visit) {
-		if (!visits.containsValue(visit)) {
+		if (!visitsById.containsValue(visit)) {
 			
 		}
-		visits.remove(visit.getId());
+		visitsById.remove(visit.getId());
 	}
 	
 	public Visit getVisit(final Integer id) {
 		Visit visit = null;
-		if (visits.containsKey(id)) {
-			visit = visits.get(id);
+		if (visitsById.containsKey(id)) {
+			visit = visitsById.get(id);
 		}
 		return visit;
 	}
 	
+	public List<Visit> getVisitsByFirstName(final String firstName) {
+		List<Visit> visits = (List<Visit>) visitsById.values();
+		Iterator<Visit> it = visits.iterator();
+		while (it.hasNext()) {
+			Visit visit = it.next();
+			Visitor visitor = visit.getVisitor();
+			if (!visitor.getFirstName().equals(firstName)) {
+				it.remove();
+			}
+		}
+		return visits;
+	}
+	
+	public List<Visit> getVisitsByLastName(final String lastName) {
+		List<Visit> visits = (List<Visit>) visitsById.values();
+		Iterator<Visit> it = visits.iterator();
+		while (it.hasNext()) {
+			Visit visit = it.next();
+			Visitor visitor = visit.getVisitor();
+			if (!visitor.getLastName().equals(lastName)) {
+				it.remove();
+			}
+		}
+		return visits;
+	}
+	
 	public List<Visit> getVisitsByCompany(final Company company) {
-		List<Visit> visits = (List<Visit>) this.visits.values();
+		List<Visit> visits = (List<Visit>) visitsById.values();
 		Iterator<Visit> it = visits.iterator();
 		while (it.hasNext()) {
 			Visit visit = it.next();
@@ -77,5 +105,28 @@ public class VisitsCache {
 		return visits;
 	}
 	
+	public List<Visit> getVisitsBeforeTime(final DateTime date) {
+		List<Visit> visits = (List<Visit>) visitsById.values();
+		Iterator<Visit> it = visits.iterator();
+		while (it.hasNext()) {
+			Visit visit = it.next();
+			if (visit.getTimeIn().isAfter(date.getMillis())) {
+				it.remove();
+			}
+		}
+		return visits;
+	}
+	
+	public List<Visit> getVisitsAfterTime(final DateTime date) {
+		List<Visit> visits = (List<Visit>) visitsById.values();
+		Iterator<Visit> it = visits.iterator();
+		while (it.hasNext()) {
+			Visit visit = it.next();
+			if (visit.getTimeIn().isBefore(date.getMillis())) {
+				it.remove();
+			}
+		}
+		return visits;
+	}
 	
 }
