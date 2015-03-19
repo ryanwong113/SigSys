@@ -1,5 +1,6 @@
 package com.SigSys.cache;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,6 +31,12 @@ public class VisitorsCache {
 	
 	public Map<Integer, Visitor> getVisitors() {
 		return visitorsById;
+	}
+	
+	public List<Visitor> getAllVisitors() {
+		List<Visitor> visitors = new ArrayList<Visitor>();
+		visitors.addAll(visitorsById.values());
+		return visitors;
 	}
 	
 	public boolean isEmpty() {
@@ -65,7 +72,8 @@ public class VisitorsCache {
 	}
 	
 	public List<Visitor> getVisitorsByFirstName(String firstName) {
-		List<Visitor> visitors = (List<Visitor>) visitorsById.values();
+		List<Visitor> visitors = new ArrayList<Visitor>();
+		visitors.addAll(visitorsById.values());
 		Iterator<Visitor> it = visitors.iterator();
 		while (it.hasNext()) {
 			Visitor visitor = it.next();
@@ -77,11 +85,25 @@ public class VisitorsCache {
 	}
 	
 	public List<Visitor> getVisitorsByLastName(String lastName) {
-		List<Visitor> visitors = (List<Visitor>) visitorsById.values();
+		List<Visitor> visitors = new ArrayList<Visitor>();
+		visitors.addAll(visitorsById.values());
 		Iterator<Visitor> it = visitors.iterator();
 		while (it.hasNext()) {
 			Visitor visitor = it.next();
 			if (!lastName.equals(visitor.getLastName())) {
+				it.remove();
+			}
+		}
+		return visitors;
+	}
+	
+	public List<Visitor> getVisitorsByFullName(String firstName, String lastName) {
+		List<Visitor> visitors = new ArrayList<Visitor>();
+		visitors.addAll(visitorsById.values());
+		Iterator<Visitor> it = visitors.iterator();
+		while (it.hasNext()) {
+			Visitor visitor = it.next();
+			if (!(firstName.equals(visitor.getFirstName()) && lastName.equals(visitor.getLastName()))) {
 				it.remove();
 			}
 		}

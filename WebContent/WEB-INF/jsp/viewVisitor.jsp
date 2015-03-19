@@ -2,8 +2,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
 
-<a href="/SigSys/homepage">Homepage</a>
-<br>
+<table>
+	<tr><th><a href="/SigSys/homepage">Homepage</a></th></tr>
+</table>
+
 <table>
 	<tr>
 		<td>Visitor ID</td>

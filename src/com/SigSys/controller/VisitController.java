@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.SigSys.cache.VisitorsCache;
 import com.SigSys.cache.VisitsCache;
+import com.SigSys.form.FilterVisitsForm;
 import com.SigSys.form.NewVisitForm;
-import com.SigSys.model.Company;
 import com.SigSys.model.Visit;
 import com.SigSys.model.Visitor;
 
@@ -29,20 +29,29 @@ public class VisitController {
 	@Autowired
 	VisitorsCache visitorsCache;
 	
-	@ModelAttribute("companies")
-	public List<String> getCompanies() {
-		List<String> companies = new ArrayList<String>();
-		for (Company company : Company.values()) {
-			companies.add(company.name());
-		}
-		return companies;
-	}
-	
 	@ModelAttribute("visits")
 	public List<Visit> getVisits() {
 		List<Visit> visits = new ArrayList<Visit>();
 		visits.addAll(visitsCache.getVisits().values());
 		return visits;
+	}
+	
+	@RequestMapping("")
+	public String view(ModelMap modelMap) {
+		if (!visitsCache.isEmpty()) {
+			modelMap.addAttribute("isEmpty", "false");
+		} else {
+			modelMap.addAttribute("isEmpty", "true");
+		}
+		modelMap.addAttribute("newVisitForm", new NewVisitForm());
+		return "homepage";
+	}
+	
+	@RequestMapping(value = "/{visitId}", method = RequestMethod.GET)
+	public String view(ModelMap modelMap, @PathVariable Integer visitId) {
+		Visit visit = visitsCache.getVisit(visitId);
+		modelMap.addAttribute("visit", visit);
+		return "viewVisit";
 	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -77,13 +86,11 @@ public class VisitController {
 		for (int i = 1; i <= numberOfTestVisits; i++) {
 			visit = new Visit();
 			visitor = new Visitor();
-			visitor.setId(i);
 			
 			visitor.setFirstName("firstName_" + i);
 			visitor.setLastName("lastName_" + i);
 			visitorsCache.addVisitor(visitor);
 			
-			visit.setId(i);
 			visit.setVisitor(visitor);
 			visit.setTimeIn(new DateTime());
 			visitsCache.addVisit(visit);
@@ -104,12 +111,31 @@ public class VisitController {
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String search(ModelMap modelMap) {
 		
-		return redirect("");
+		return redirect("visit");
 	}
 	
-	@RequestMapping(value = "/filter", method = RequestMethod.GET)
-	public String filter(ModelMap modelMap) {
-		return redirect("homepage");
+	@RequestMapping(value = "/filter", method = RequestMethod.POST)
+	public String filter(ModelMap modelMap, @ModelAttribute("filterVisitsForm") FilterVisitsForm filterVisitsForm) {
+		String firstName = filterVisitsForm.getFirstName();
+		String lastName = filterVisitsForm.getLastName();
+		
+		if (firstName == null && lastName == null) {
+			// Both first name and last name are not set
+		}
+		
+		if (firstName != null) {
+			if (lastName != null) {
+				// Both first name and last name are set
+				
+			} else {
+				// Only first name is set
+			}
+		} else {
+			// Only last name is set
+			
+		}
+		
+		return redirect("visit");
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
@@ -117,13 +143,6 @@ public class VisitController {
 		visitsCache.updateVisit(visit);
 		modelMap.addAttribute("visit", visit);
 		return redirect("homepage");
-	}
-	
-	@RequestMapping(value = "/view/{visitId}", method = RequestMethod.GET)
-	public String view(ModelMap modelMap, @PathVariable Integer visitId) {
-		Visit visit = visitsCache.getVisit(visitId);
-		modelMap.addAttribute("visit", visit);
-		return "viewVisit";
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)

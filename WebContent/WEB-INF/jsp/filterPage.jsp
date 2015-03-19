@@ -2,34 +2,48 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
 
-<head>
 <title>Filter</title>
-</head>
-<body>
-	<p>
-	<form:form action="/SigSys/filter/visits" modelAttribute="filterVisitsForm" method="POST">
-		<label for="companyCheckboxes">Company: </label>
-		<form:checkboxes id="companyCheckboxes" items="${companies}" path="companies" />
-		<br>
-		<label for="timeInInput">Time In: </label>
-		<form:input id="timeInInput" type="text" path="timeIn" />
-		<br>
-		<label for="timeOutInput">Time Out: </label>		
-		<form:input id="timeOutInput" type="text" path="timeOut" />
-		<br>
-		<input type="submit" value="Filter Visits" /> 
-	</form:form>
-	</p>
-	
-	<p>
-	<form:form action="/SigSys/filter/visitors" modelAttribute="filterVisitorsForm" method="POST">
-		<label for="firstNameInput">First Name: </label>
-		<form:input id="firstNameInput" type="text" path="firstName" />
-		<br>
-		<label for="lastNameInput">Last Name: </label>
-		<form:input id="lastNameInput" type="text" path="lastName" />
-		<br>
-		<input type="submit" value="Filter Visitors" /> 
-	</form:form>
-	</p>
-</body>
+
+<table>
+	<tr><th><a href="/SigSys/homepage">Homepage</a></th></tr>
+</table>
+
+<form:form action="/SigSys/visit/filter" modelAttribute="filterVisitsForm" method="POST">
+	<table>
+		<tr>
+			<td><label for="firstNameInput">First Name: </label></td>
+			<td><form:input id="firstNameInput" type="text" path="firstName" /></td>
+		</tr>
+		<tr>
+			<td><label for="lastNameInput">Last Name: </label></td>
+			<td><form:input id="lastNameInput" type="text" path="lastName" /></td>
+		</tr>
+		<tr>
+			<td><label for="companyCheckboxes">Company: </label></td>
+			<td><form:checkboxes id="companyCheckboxes" items="${companies}" path="companies" /></td>
+		</tr>
+		<tr>
+			<td><label for="timeInInput">Time In: </label></td>
+			<td><form:input id="timeInInput" type="text" path="timeIn" /></td>
+		</tr>
+		<tr>
+			<td><label for="timeOutInput">Time Out: </label></td>
+			<td><form:input id="timeOutInput" type="text" path="timeOut" /></td>
+		</tr>
+	</table>
+	<input type="submit" value="Filter Visits" />
+</form:form>
+
+<form:form action="/SigSys/visitor/filter" modelAttribute="filterVisitorsForm" method="POST">
+	<table>
+		<tr>
+			<td><label for="firstNameInput">First Name: </label></td>
+			<td><form:input id="firstNameInput" type="text" path="firstName" /></td>
+		</tr>
+		<tr>
+			<td><label for="lastNameInput">Last Name: </label></td>
+			<td><form:input id="lastNameInput" type="text" path="lastName" /></td>
+		<tr>
+	</table>
+	<input type="submit" value="Filter Visitors" />		
+</form:form>

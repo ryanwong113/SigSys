@@ -27,13 +27,13 @@ public class AdminController {
 	@RequestMapping(value = "/reloadVisit", method = RequestMethod.GET)
 	public String reloadVisit(ModelMap modelMap) {
 		visitsCache.refresh();
-		return "homepage";
+		return redirect("homepage");
 	}
 	
 	@RequestMapping(value = "/reloadVisitor", method = RequestMethod.GET)
 	public String reloadVisitor(ModelMap modelMap) {
 		visitorsCache.refresh();
-		return "homepage";
+		return redirect("homepage");
 	}
 	
 	private String redirect(String page) {

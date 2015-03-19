@@ -1,33 +1,32 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<head>
 <title>New Visit</title>
-</head>
-<body>
-	<a href="/SigSys/homepage">Homepage</a>
+
+<table>
+	<tr><th><a href="/SigSys/homepage">Homepage</a></th></tr>
+</table>
+
+<form:form action="/SigSys/visit/add" modelAttribute="newVisitForm" method="POST">
+	<label for="firstNameInput">First Name: </label>
+     	<form:input id="firstNameInput" path="visitor.firstName" />
 	<br>
-	<form:form action="/SigSys/visit/add" modelAttribute="newVisitForm" method="POST">
-		<label for="firstNameInput">First Name: </label>
-      	<form:input id="firstNameInput" path="visitor.firstName" />
-		<br>
-		<label for="lastNameInput">Last Name: </label>
-		<form:input id="lastNameInput" path="visitor.lastName" />
-		<br>
-		<label for="fromInput">From: </label>
-		<form:input id="fromInput" path="visitor.from" />
-		<br>
-		<label for="companySelect">Visiting: </label>
-		<form:select id="companySelect" path="visit.company">
-			<form:option value="">Select Company: </form:option>
-			<c:forEach items="${companies}" var="company">
-				<form:option value="${company}">${company}</form:option>
-		 	</c:forEach>
-		</form:select>
-		<br>
-		<label for="visitReasonInput">Visit Reason: </label>
-		<form:input id="visitReasonInput" path="visit.visitReason" />
-		<br>
-	   	<input type="submit" value="submit" />  
-	</form:form>
-</body>
+	<label for="lastNameInput">Last Name: </label>
+	<form:input id="lastNameInput" path="visitor.lastName" />
+	<br>
+	<label for="fromInput">From: </label>
+	<form:input id="fromInput" path="visitor.from" />
+	<br>
+	<label for="companySelect">Visiting: </label>
+	<form:select id="companySelect" path="visit.company">
+		<form:option value="">Select Company: </form:option>
+		<c:forEach items="${companies}" var="company">
+			<form:option value="${company}">${company}</form:option>
+	 	</c:forEach>
+	</form:select>
+	<br>
+	<label for="visitReasonInput">Visit Reason: </label>
+	<form:input id="visitReasonInput" path="visit.visitReason" />
+	<br>
+   	<input type="submit" value="submit" />  
+</form:form>

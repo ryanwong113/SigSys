@@ -71,8 +71,7 @@ public class VisitsCache {
 		List<Visit> visits = (List<Visit>) visitsById.values();
 		Iterator<Visit> it = visits.iterator();
 		while (it.hasNext()) {
-			Visit visit = it.next();
-			Visitor visitor = visit.getVisitor();
+			Visitor visitor = it.next().getVisitor();
 			if (!visitor.getFirstName().equals(firstName)) {
 				it.remove();
 			}
@@ -84,8 +83,7 @@ public class VisitsCache {
 		List<Visit> visits = (List<Visit>) visitsById.values();
 		Iterator<Visit> it = visits.iterator();
 		while (it.hasNext()) {
-			Visit visit = it.next();
-			Visitor visitor = visit.getVisitor();
+			Visitor visitor = it.next().getVisitor();
 			if (!visitor.getLastName().equals(lastName)) {
 				it.remove();
 			}
