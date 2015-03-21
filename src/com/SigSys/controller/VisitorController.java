@@ -23,6 +23,7 @@ public class VisitorController {
 	@Autowired
 	VisitorsCache visitorsCache;
 	
+	@ModelAttribute("visitors")
 	public List<Visitor> getVisitors() {
 		List<Visitor> visitors = new ArrayList<Visitor>();
 		visitors.addAll(visitorsCache.getVisitors().values());
@@ -66,11 +67,11 @@ public class VisitorController {
 		String lastName = filterVisitorsForm.getLastName();
 		List<Visitor> filteredVisitors;
 		
-		if (firstName == null && lastName == null) {
+		if (firstName.isEmpty() && lastName.isEmpty()) {
 			filteredVisitors = visitorsCache.getAllVisitors();
-		} else if (firstName != null && lastName == null) {
+		} else if (!firstName.isEmpty() && lastName.isEmpty()) {
 			filteredVisitors = visitorsCache.getVisitorsByFirstName(firstName);
-		} else if (firstName == null && lastName != null) {
+		} else if (firstName.isEmpty() && !lastName.isEmpty()) {
 			filteredVisitors = visitorsCache.getVisitorsByLastName(lastName);
 		} else {
 			filteredVisitors = visitorsCache.getVisitorsByFullName(firstName, lastName);

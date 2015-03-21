@@ -1,5 +1,6 @@
 package com.SigSys.cache;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -67,8 +68,15 @@ public class VisitsCache {
 		return visit;
 	}
 	
+	public List<Visit> getAllVisits() {
+		List<Visit> visits = new ArrayList<Visit>();
+		visits.addAll(visitsById.values());
+		return visits;
+	}
+	
 	public List<Visit> getVisitsByFirstName(final String firstName) {
-		List<Visit> visits = (List<Visit>) visitsById.values();
+		List<Visit> visits = new ArrayList<Visit>();
+		visits.addAll(visitsById.values());
 		Iterator<Visit> it = visits.iterator();
 		while (it.hasNext()) {
 			Visitor visitor = it.next().getVisitor();
@@ -80,7 +88,8 @@ public class VisitsCache {
 	}
 	
 	public List<Visit> getVisitsByLastName(final String lastName) {
-		List<Visit> visits = (List<Visit>) visitsById.values();
+		List<Visit> visits = new ArrayList<Visit>();
+		visits.addAll(visitsById.values());
 		Iterator<Visit> it = visits.iterator();
 		while (it.hasNext()) {
 			Visitor visitor = it.next().getVisitor();
@@ -91,8 +100,22 @@ public class VisitsCache {
 		return visits;
 	}
 	
+	public List<Visit> getVisitsByFullName(final String firstName, final String lastName) {
+		List<Visit> visits = new ArrayList<Visit>();
+		visits.addAll(visitsById.values());
+		Iterator<Visit> it = visits.iterator();
+		while (it.hasNext()) {
+			Visitor visitor = it.next().getVisitor();
+			if (!(visitor.getFirstName().equals(firstName) && visitor.getLastName().equals(lastName))) {
+				it.remove();
+			}
+		}
+		return visits;
+	}
+	
 	public List<Visit> getVisitsByCompany(final Company company) {
-		List<Visit> visits = (List<Visit>) visitsById.values();
+		List<Visit> visits = new ArrayList<Visit>();
+		visits.addAll(visitsById.values());
 		Iterator<Visit> it = visits.iterator();
 		while (it.hasNext()) {
 			Visit visit = it.next();
@@ -104,7 +127,8 @@ public class VisitsCache {
 	}
 	
 	public List<Visit> getVisitsBeforeTime(final DateTime date) {
-		List<Visit> visits = (List<Visit>) visitsById.values();
+		List<Visit> visits = new ArrayList<Visit>();
+		visits.addAll(visitsById.values());
 		Iterator<Visit> it = visits.iterator();
 		while (it.hasNext()) {
 			Visit visit = it.next();
@@ -116,7 +140,8 @@ public class VisitsCache {
 	}
 	
 	public List<Visit> getVisitsAfterTime(final DateTime date) {
-		List<Visit> visits = (List<Visit>) visitsById.values();
+		List<Visit> visits = new ArrayList<Visit>();
+		visits.addAll(visitsById.values());
 		Iterator<Visit> it = visits.iterator();
 		while (it.hasNext()) {
 			Visit visit = it.next();

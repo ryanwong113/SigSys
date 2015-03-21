@@ -16,8 +16,10 @@ import com.SigSys.cache.VisitorsCache;
 import com.SigSys.cache.VisitsCache;
 import com.SigSys.form.FilterVisitsForm;
 import com.SigSys.form.NewVisitForm;
+import com.SigSys.model.Company;
 import com.SigSys.model.Visit;
 import com.SigSys.model.Visitor;
+import com.SigSys.util.VisitsFilter;
 
 @RequestMapping("/visit")
 @Controller
@@ -29,7 +31,6 @@ public class VisitController {
 	@Autowired
 	VisitorsCache visitorsCache;
 	
-	@ModelAttribute("visits")
 	public List<Visit> getVisits() {
 		List<Visit> visits = new ArrayList<Visit>();
 		visits.addAll(visitsCache.getVisits().values());
@@ -44,21 +45,16 @@ public class VisitController {
 			modelMap.addAttribute("isEmpty", "true");
 		}
 		modelMap.addAttribute("newVisitForm", new NewVisitForm());
+		modelMap.addAttribute("visits", getVisits());
 		return "homepage";
 	}
 	
-	@RequestMapping(value = "/{visitId}", method = RequestMethod.GET)
-	public String view(ModelMap modelMap, @PathVariable Integer visitId) {
-		Visit visit = visitsCache.getVisit(visitId);
-		modelMap.addAttribute("visit", visit);
-		return "viewVisit";
-	}
-	
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String add(ModelMap modelMap) {
-		modelMap.addAttribute("newVisitForm", new NewVisitForm());
-		return "newVisit";
-	}
+//	@RequestMapping(value = "/{visitId}", method = RequestMethod.GET)
+//	public String view(ModelMap modelMap, @PathVariable Integer visitId) {
+//		Visit visit = visitsCache.getVisit(visitId);
+//		modelMap.addAttribute("visit", visit);
+//		return "viewVisit";
+//	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String add(ModelMap modelMap, @ModelAttribute("newVisitForm") NewVisitForm newVisitForm) {
@@ -111,31 +107,40 @@ public class VisitController {
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String search(ModelMap modelMap) {
 		
-		return redirect("visit");
+		return "viewVisits";
 	}
 	
 	@RequestMapping(value = "/filter", method = RequestMethod.POST)
 	public String filter(ModelMap modelMap, @ModelAttribute("filterVisitsForm") FilterVisitsForm filterVisitsForm) {
+		List<Visit> filteredVisits = visitsCache.getAllVisits();
 		String firstName = filterVisitsForm.getFirstName();
 		String lastName = filterVisitsForm.getLastName();
+		List<Company> companies = filterVisitsForm.getCompanies();
+		DateTime timeIn = filterVisitsForm.getTimeIn();
+		DateTime timeOut = filterVisitsForm.getTimeOut();
 		
-		if (firstName == null && lastName == null) {
-			// Both first name and last name are not set
+		// Filter visits with companies
+		if (companies != null) {
+			filteredVisits = VisitsFilter.filterVisitsByCompanies(filteredVisits, companies);
 		}
 		
-		if (firstName != null) {
-			if (lastName != null) {
-				// Both first name and last name are set
-				
-			} else {
-				// Only first name is set
-			}
-		} else {
-			// Only last name is set
-			
+		// Filter visits with visitors' names
+		if (!firstName.isEmpty() && !lastName.isEmpty()) {
+			filteredVisits = VisitsFilter.filterVisitsByFullName(filteredVisits, firstName, lastName);
+		} else if (!firstName.isEmpty() && lastName.isEmpty()) {
+			filteredVisits = VisitsFilter.filterVisitsByFirstName(filteredVisits, firstName);
+		} else if (firstName.isEmpty() && !lastName.isEmpty()) {
+			filteredVisits = VisitsFilter.filterVisitsByLastName(filteredVisits, lastName);
 		}
 		
-		return redirect("visit");
+		if (timeIn != null) {
+			filteredVisits = VisitsFilter.filterVisitsByTimeInBefore(filteredVisits, timeIn);
+		}
+		if (timeOut != null) {
+			filteredVisits = VisitsFilter.filterVisitsByTimeOutBefore(filteredVisits, timeOut);
+		}
+		modelMap.addAttribute("visits", filteredVisits);
+		return "viewVisits";
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.GET)

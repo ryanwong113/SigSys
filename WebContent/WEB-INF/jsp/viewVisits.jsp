@@ -3,19 +3,19 @@
 <%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<title>Visitors</title>
+<title>Visits</title>
 
 <table>
 <tr><th><a href="/SigSys/homepage">Homepage</a></th></tr>
 </table>
 
-<h2>Visitors</h2>
+<h2>Visits</h2>
 
 <c:choose>
 	<c:when test="${isEmpty}">
-		Oh, no visitors can be shown...
+		Oh, no visits can be shown...
 	</c:when>
 	<c:otherwise>
-		<tags:visitorsTable />
+		<tags:visitsTable />
 	</c:otherwise>
 </c:choose>
