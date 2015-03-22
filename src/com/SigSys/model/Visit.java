@@ -61,4 +61,16 @@ public class Visit {
 	public void setTimeOut(DateTime timeOut) {
 		this.timeOut = timeOut;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Visit)) return false;
+		Visit v1 = (Visit) o;
+		if (!this.visitor.equals(v1.visitor)) return false;
+		if (!this.company.equals(v1.company)) return false;
+		if (!this.timeIn.equals(v1.timeIn)) return false;
+		if (!this.timeOut.equals(v1.timeOut)) return false;
+		if (!this.visitReason.equals(v1.visitReason)) return false;
+		return true;
+	}
 }

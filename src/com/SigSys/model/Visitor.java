@@ -42,4 +42,13 @@ public class Visitor {
 		this.from = from;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Visitor)) return false;
+		Visitor v1 = (Visitor) o;
+		if (!this.firstName.equals(v1.firstName)) return false;
+		if (!this.lastName.equals(v1.lastName)) return false;
+		if (!this.from.equals(v1.from)) return false;
+		return true;
+	}
 }
